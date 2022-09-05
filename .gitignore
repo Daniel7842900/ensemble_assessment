@@ -119,7 +119,7 @@ dist
 {"mode":"full","isActive":false}
 
 #db config
-config/*
+#config/*
 
 #Tailwind CSS build
 build/styles.css
