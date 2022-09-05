@@ -16,6 +16,9 @@ app.options("*", cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+// Create a database connection
+const db = require("./models/db.js");
+
 app.get("/", (req, res) => {
   res.send("hello ensemble");
 });
