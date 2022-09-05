@@ -1,4 +1,4 @@
-INSERT INTO popularities (likes, dislikes, movie_id)
+INSERT INTO movie_likes (likes, dislikes, movie_id)
 VALUES
 (0,0,1),
 (1,0,2),

@@ -19,8 +19,14 @@ app.use(express.urlencoded({ extended: true }));
 // Create a database connection
 const db = require("./models/db.js");
 
+// Import routers
+const movieRouter = require("./routes/movie.js");
+
+// Load routers
+movieRouter.loadRouter(app);
+
 app.get("/", (req, res) => {
-  res.send("hello ensemble");
+  res.send("Hello Ensemble");
 });
 
 app.listen(port, () => {
