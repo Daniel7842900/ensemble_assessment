@@ -51,7 +51,29 @@ class Movie {
     }
   };
 
-  updateById = async (id, movie, result) => {};
+  updateById = async (id, movie, result) => {
+    let query =
+      "UPDATE movies SET title = ?, description = ?, released = ?, duration = ?, rating = ? WHERE id = ?";
+    try {
+      let rows = await db.query(query, [
+        movie.title,
+        movie.description,
+        movie.released,
+        movie.duration,
+        movie.rating,
+        id,
+      ]);
+
+      if (rows[0].affectedRows == 0) {
+        return result({ isFound: false }, null);
+      }
+
+      return result(null, rows);
+    } catch (err) {
+      console.log("movie updateById err: " + err);
+      return result(err, null);
+    }
+  };
 
   deleteById = async (id, result) => {};
 }
