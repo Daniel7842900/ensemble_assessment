@@ -15,19 +15,19 @@ exports.findAll = (req, res) => {
   });
 };
 
-exports.findById = (req, res) => {
+exports.findByTitle = (req, res) => {
   // Validate the request
   if (_.isEmpty(req.params)) {
-    res.status(400).send({
-      message: "Parameter needs to be provided!",
+    res.status(404).send({
+      message: `Query parameter for toggling needs to be provided!`,
     });
   }
 
-  movie.findById(req.params.id, async (err, data) => {
+  movie.findByTitle(req.params.title, async (err, data) => {
     if (err) {
       if (!err.isFound) {
         res.status(404).send({
-          message: `Movie ${req.params.id} is not found!`,
+          message: `Movie ${req.params.title} is not found!`,
         });
       } else {
         res.status(500).send({
@@ -39,8 +39,6 @@ exports.findById = (req, res) => {
     }
   });
 };
-
-exports.findByTitle = (req, res) => {};
 
 exports.create = (req, res) => {};
 

@@ -1,4 +1,5 @@
 const db = require("./db.js");
+const _ = require("lodash");
 
 class Movie {
   constructor(title, description, released, duration, rating) {
@@ -20,10 +21,11 @@ class Movie {
     }
   };
 
-  findById = async (id, result) => {
-    let query = "SELECT * FROM movies m WHERE m.id = ?";
+  findByTitle = async (title, result) => {
+    let query = "SELECT * FROM movies m";
+    if (title) query += " WHERE UPPER(m.title) LIKE UPPER(?)";
     try {
-      let rows = await db.query(query, id);
+      let rows = await db.query(query, title);
 
       if (_.isEmpty(rows[0])) {
         return result({ isFound: false }, null);
@@ -31,12 +33,10 @@ class Movie {
 
       return result(null, rows[0]);
     } catch (err) {
-      console.log("movie findById err: " + err);
+      console.log("movie findByTitle err: " + err);
       return result(err, null);
     }
   };
-
-  findByTitle = async (title, result) => {};
 
   create = async (movie, result) => {};
 

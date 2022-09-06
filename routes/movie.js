@@ -5,9 +5,6 @@ const loadRouter = (app) => {
   // Get all movies
   router.get("/", movies.findAll);
 
-  // Get a movie with id
-  router.get("/:id", movies.findById);
-
   // Get a movie with title
   router.get("/:title", movies.findByTitle);
 
