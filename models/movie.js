@@ -11,9 +11,9 @@ class Movie {
   }
 
   findAll = async (result) => {
-    let query = "SELECT * FROM movies";
+    const query = "SELECT * FROM movies";
     try {
-      let rows = await db.query(query);
+      const rows = await db.query(query);
       return result(null, rows[0]);
     } catch (err) {
       console.log("movie findAll err: " + err);
@@ -22,10 +22,10 @@ class Movie {
   };
 
   findByTitle = async (title, result) => {
-    let query = "SELECT * FROM movies m";
+    const query = "SELECT * FROM movies m";
     if (title) query += " WHERE UPPER(m.title) LIKE UPPER(?)";
     try {
-      let rows = await db.query(query, title);
+      const rows = await db.query(query, title);
 
       if (_.isEmpty(rows[0])) {
         return result({ isFound: false }, null);
@@ -40,11 +40,22 @@ class Movie {
 
   create = async (movie, result) => {
     console.log(movie);
-    let query = "INSERT INTO movies SET ?";
+    const createMovieQuery = "INSERT INTO movies SET ?";
+    const createMovieLikesQuery =
+      "INSERT INTO movie_likes (liked, disliked, movie_id) VALUES (?, ?, ?)";
     try {
-      let rows = await db.query(query, movie);
-      console.log("Created a movie: ", { id: rows[0].insertId, ...movie });
-      return result(null, { id: rows[0].insertId, ...movie });
+      const createdMovie = await db.query(createMovieQuery, movie);
+      const movieId = createdMovie[0].insertId;
+      console.log("Created a movie: ", {
+        id: movieId,
+        ...movie,
+      });
+      const createdMovieLikes = await db.query(createMovieLikesQuery, [
+        0,
+        0,
+        movieId,
+      ]);
+      return result(null, { id: movieId, ...movie });
     } catch (err) {
       console.log("movie create err: " + err);
       return result(err, null);
@@ -52,10 +63,10 @@ class Movie {
   };
 
   updateById = async (id, movie, result) => {
-    let query =
+    const query =
       "UPDATE movies SET title = ?, description = ?, released = ?, duration = ?, rating = ? WHERE id = ?";
     try {
-      let rows = await db.query(query, [
+      const rows = await db.query(query, [
         movie.title,
         movie.description,
         movie.released,
@@ -76,9 +87,9 @@ class Movie {
   };
 
   deleteById = async (id, result) => {
-    let query = "DELETE FROM movies WHERE id = ?";
+    const query = "DELETE FROM movies WHERE id = ?";
     try {
-      let rows = await db.query(query, id);
+      const rows = await db.query(query, id);
 
       if (rows[0].affectedRows == 0) {
         return result({ isFound: false }, null);
