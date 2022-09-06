@@ -1,5 +1,6 @@
 const router = require("express").Router();
 const movies = require("../controllers/movie.js");
+const movieLikes = require("../services/movieLikes.js");
 
 const loadRouter = (app) => {
   // Get all movies
@@ -16,6 +17,9 @@ const loadRouter = (app) => {
 
   // Delete a movie
   router.delete("/:id", movies.deleteById);
+
+  // Update like/dislike status
+  router.post("/:id/toggle-like", movieLikes.updateLikesById);
 
   app.use("/api/movie", router);
 };
