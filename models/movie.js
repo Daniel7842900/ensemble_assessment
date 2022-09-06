@@ -20,7 +20,21 @@ class Movie {
     }
   };
 
-  findById = async (id, result) => {};
+  findById = async (id, result) => {
+    let query = "SELECT * FROM movies m WHERE m.id = ?";
+    try {
+      let rows = await db.query(query, id);
+
+      if (_.isEmpty(rows[0])) {
+        return result({ isFound: false }, null);
+      }
+
+      return result(null, rows[0]);
+    } catch (err) {
+      console.log("movie findById err: " + err);
+      return result(err, null);
+    }
+  };
 
   findByTitle = async (title, result) => {};
 
