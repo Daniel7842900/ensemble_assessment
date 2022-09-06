@@ -9,7 +9,16 @@ class Movie {
     this.rating = rating;
   }
 
-  findAll = async (result) => {};
+  findAll = async (result) => {
+    let query = "SELECT * FROM movies";
+    try {
+      let rows = await db.query(query);
+      return result(null, rows[0]);
+    } catch (err) {
+      console.log("movie findAll err: " + err);
+      return result(err, null);
+    }
+  };
 
   findById = async (id, result) => {};
 
