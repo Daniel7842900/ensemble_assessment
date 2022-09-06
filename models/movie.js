@@ -75,7 +75,21 @@ class Movie {
     }
   };
 
-  deleteById = async (id, result) => {};
+  deleteById = async (id, result) => {
+    let query = "DELETE FROM movies WHERE id = ?";
+    try {
+      let rows = await db.query(query, id);
+
+      if (rows[0].affectedRows == 0) {
+        return result({ isFound: false }, null);
+      }
+
+      return result(null, rows);
+    } catch (err) {
+      console.log("movie deleteById err: " + err);
+      return result(err, null);
+    }
+  };
 }
 
 module.exports = Movie;

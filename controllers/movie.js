@@ -137,4 +137,25 @@ exports.updateById = (req, res) => {
   });
 };
 
-exports.deleteById = (req, res) => {};
+exports.deleteById = (req, res) => {
+  if (_.isEmpty(req.params)) {
+    res.status(400).send({
+      message: `Parameter needs to be provided!`,
+    });
+  }
+
+  movie.deleteById(req.params.id, (err, data) => {
+    if (err) {
+      if (err.isFound === false) {
+        res.status(404).send({
+          message: `Movie ${req.params.id} is not found!`,
+        });
+      }
+      res.status(500).send({
+        message: `An error deleting movie ${req.params.id}`,
+      });
+    } else {
+      res.send(data);
+    }
+  });
+};
