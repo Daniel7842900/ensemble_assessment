@@ -39,7 +39,6 @@ class Movie {
   };
 
   create = async (movie, result) => {
-    console.log(movie);
     const createMovieQuery = "INSERT INTO movies SET ?";
     const createMovieLikesQuery =
       "INSERT INTO movie_likes (liked, disliked, movie_id) VALUES (?, ?, ?)";

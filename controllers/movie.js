@@ -115,6 +115,7 @@ exports.updateById = (req, res) => {
 };
 
 exports.deleteById = (req, res) => {
+  // Validate the request
   if (_.isEmpty(req.params)) {
     res.status(400).send({
       message: `Parameter needs to be provided!`,
