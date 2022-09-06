@@ -38,7 +38,18 @@ class Movie {
     }
   };
 
-  create = async (movie, result) => {};
+  create = async (movie, result) => {
+    console.log(movie);
+    let query = "INSERT INTO movies SET ?";
+    try {
+      let rows = await db.query(query, movie);
+      console.log("Created a movie: ", { id: rows[0].insertId, ...movie });
+      return result(null, { id: rows[0].insertId, ...movie });
+    } catch (err) {
+      console.log("movie create err: " + err);
+      return result(err, null);
+    }
+  };
 
   updateById = async (id, movie, result) => {};
 

@@ -19,7 +19,7 @@ exports.findByTitle = (req, res) => {
   // Validate the request
   if (_.isEmpty(req.params)) {
     res.status(404).send({
-      message: `Query parameter for toggling needs to be provided!`,
+      message: `Parameter needs to be provided!`,
     });
   }
 
@@ -40,7 +40,51 @@ exports.findByTitle = (req, res) => {
   });
 };
 
-exports.create = (req, res) => {};
+exports.create = (req, res) => {
+  // Validate the request
+  if (_.isEmpty(req.body)) {
+    res.status(400).send({
+      message: "Content can't be empty!",
+    });
+  }
+
+  // Validate the object with restriction
+  const movieSchema = Joi.object({
+    title: Joi.string().min(1).max(50).required(),
+    description: Joi.string().min(1).max(100).required(),
+    released: Joi.date().required(),
+    duration: Joi.number().min(0).max(300).required(),
+    rating: Joi.string().min(1).max(20).required(),
+  });
+
+  const validationResult = movieSchema.validate(req.body);
+  const { value, error } = validationResult;
+
+  // Output validation error
+  if (error) {
+    res.status(400).send(error.details[0].message);
+    return;
+  }
+
+  // Create a new movie object with given input
+  const newMovie = _.pick(req.body, [
+    "title",
+    "description",
+    "released",
+    "duration",
+    "rating",
+  ]);
+
+  movie.create(newMovie, async (err, data) => {
+    if (err) {
+      res.status(500).send({
+        message: err.message,
+      });
+    } else {
+      res.send(data);
+    }
+  });
+};
 
 exports.updateById = (req, res) => {};
 
