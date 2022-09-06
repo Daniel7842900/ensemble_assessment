@@ -49,22 +49,10 @@ exports.create = (req, res) => {
   }
 
   // Validate the object with restriction
-  const movieSchema = Joi.object({
-    title: Joi.string().min(1).max(50).required(),
-    description: Joi.string().min(1).max(500).required(),
-    released: Joi.date().required(),
-    duration: Joi.number().min(0).max(300).required(),
-    rating: Joi.string().min(1).max(20).required(),
-  });
-
-  const validationResult = movieSchema.validate(req.body);
-  const { value, error } = validationResult;
+  const { error } = validateMovieSchema(req.body);
 
   // Output validation error
-  if (error) {
-    res.status(400).send(error.details[0].message);
-    return;
-  }
+  if (error) return res.status(400).send(error.details[0].message);
 
   // Create a new movie object with given input
   const newMovie = _.pick(req.body, [
@@ -95,21 +83,10 @@ exports.updateById = (req, res) => {
   }
 
   // Validate the object with restriction
-  const movieSchema = Joi.object({
-    title: Joi.string().min(1).max(50).required(),
-    description: Joi.string().min(1).max(500).required(),
-    released: Joi.date().required(),
-    duration: Joi.number().min(0).max(300).required(),
-    rating: Joi.string().min(1).max(20).required(),
-  });
-
-  const validationResult = movieSchema.validate(req.body);
-  const { value, error } = validationResult;
+  const { error } = validateMovieSchema(req.body);
 
   // Output validation error
-  if (error) {
-    return res.status(400).send(error.details[0].message);
-  }
+  if (error) return res.status(400).send(error.details[0].message);
 
   // Create a new movie object with given input
   const updatedMovie = _.pick(req.body, [
@@ -159,3 +136,15 @@ exports.deleteById = (req, res) => {
     }
   });
 };
+
+function validateMovieSchema(movie) {
+  const movieSchema = Joi.object({
+    title: Joi.string().min(1).max(50).required(),
+    description: Joi.string().min(1).max(500).required(),
+    released: Joi.date().required(),
+    duration: Joi.number().min(0).max(300).required(),
+    rating: Joi.string().min(1).max(20).required(),
+  });
+
+  return movieSchema.validate(movie);
+}
